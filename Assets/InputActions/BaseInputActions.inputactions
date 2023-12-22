@@ -156,6 +156,54 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "SpawnObjects",
+            "id": "35275791-953f-4589-8d17-799ee8c5ea4d",
+            "actions": [
+                {
+                    "name": "MouseClickLeft",
+                    "type": "Button",
+                    "id": "205bd989-165b-487d-9bd9-00b24802f505",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseClickRight",
+                    "type": "Button",
+                    "id": "c6db2b71-32ca-4f2c-86ae-b9e88f21ef34",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fdbd75d4-c8ad-4823-840c-e518ef0f01ad",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseClickLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a997848-5388-4924-8232-118e38b32048",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseClickRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

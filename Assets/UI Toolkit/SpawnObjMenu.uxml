@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="height: 259px; max-height: none; flex-grow: 1; justify-content: flex-end; flex-direction: column; flex-wrap: nowrap; align-items: flex-end;">
+        <ui:Label display-tooltip-when-elided="true" name="Radius" style="align-items: flex-end; width: 142px; color: rgb(255, 255, 255); justify-content: flex-end; height: 95px;" />
+        <ui:VisualElement style="justify-content: flex-end; flex-grow: 0; height: 61px; flex-direction: column; align-items: flex-end;">
+            <ui:Button text="ADD SPHERE" display-tooltip-when-elided="true" name="Spawn" style="width: 141px; -unity-text-align: middle-center;" />
+            <ui:Button text="MOVE" display-tooltip-when-elided="true" name="Move" style="width: 141px;" />
+            <ui:Button text="ROTATE" display-tooltip-when-elided="true" name="Rotate" style="width: 141px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row-reverse; width: auto; flex-basis: auto; align-items: flex-end; justify-content: flex-end;">
+            <ui:Button display-tooltip-when-elided="true" name="Red" style="flex-wrap: nowrap; width: 29px; -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgb(255, 0, 0);" />
+            <ui:Button display-tooltip-when-elided="true" name="Green" style="width: 29px; background-color: rgb(0, 255, 0);" />
+            <ui:Button display-tooltip-when-elided="true" name="Yellow" style="width: 29px; background-color: rgb(255, 255, 0);" />
+            <ui:Button display-tooltip-when-elided="true" name="Blue" style="width: 29px; background-color: rgb(0, 0, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement style="justify-content: flex-end;">
+            <ui:Slider picking-mode="Ignore" label="Transparency" value="100" high-value="100" name="Transparency" style="justify-content: flex-start; width: 136px; flex-wrap: wrap; align-items: flex-end; flex-direction: row; flex-shrink: 1; flex-grow: 0; position: relative; opacity: 1; visibility: visible; color: rgb(255, 255, 255); height: 43px; -unity-text-outline-color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
