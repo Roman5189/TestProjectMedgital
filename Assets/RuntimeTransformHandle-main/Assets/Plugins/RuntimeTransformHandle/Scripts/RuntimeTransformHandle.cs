@@ -161,11 +161,10 @@ namespace RuntimeHandle
 
         private void GetHandle(ref HandleBase p_handle, ref Vector3 p_hitPoint)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = handleCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
             if (hits.Length == 0)
                 return;
-
             foreach (RaycastHit hit in hits)
             {
                 p_handle = hit.collider.gameObject.GetComponentInParent<HandleBase>();

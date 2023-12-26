@@ -32,16 +32,18 @@ public class SpawnController : MonoBehaviour
     [HideInInspector]
     public bool spawnMode;
     public static bool openSpawnManager;
-    private void Start()
+    private void Awake()
     {
-        
+        ConfigurateButtons();
+        uIDocument.gameObject.SetActive(false);
+        uIDocument.enabled = true;
     }
     private void ConfigurateButtons() 
     {   
         mouseButtonLeft = mapActions.FindAction("MouseClickLeft");
         mouseButtonRight = mapActions.FindAction("MouseClickRight");
 
-        //mouseButtonLeft.performed += context => SpawnObject();
+        mouseButtonLeft.performed += context => SpawnObject();
         mouseButtonRight.performed += context => UndoSpawn();
 
         visualElement = uIDocument.rootVisualElement;
@@ -78,10 +80,19 @@ public class SpawnController : MonoBehaviour
         openSpawnManager = true;
     }
 
+    public void SetCamera(Camera camera) 
+    {
+        if (cam != camera && camera.name != "Camera") 
+        {
+            cam = camera;
+            runtimeTransformHandle.handleCamera= cam;
+        }
+
+    }
     private void OnEnable()
     {
-        //mouseButtonLeft.Enable();
-        //mouseButtonRight.Enable();
+        mouseButtonLeft.Enable();
+        mouseButtonRight.Enable();
     }
 
     private void OnDisable()
@@ -131,17 +142,20 @@ public class SpawnController : MonoBehaviour
     }
     private void RenderLine(Transform startPoint) 
     {
+        if (!cam)
+            return;
+        
         var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector3 targetPoint = new Vector3(mousePos.x, mousePos.y, 0);
         startPoint.GetComponent<LineRenderer>().SetPosition(0, startPoint.position);
         startPoint.GetComponent<LineRenderer>().SetPosition(1, targetPoint);
         textRadius.text = Vector3.Distance(startPoint.position, targetPoint).ToString();
     }
-    public void SpawnObject(Camera camera)
+    public void SpawnObject()
     {
         //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //for old Input System
-        cam = camera;
-        if (cam && cam.name!= "Camera" && !spawnObj)
+
+        if (cam && !spawnObj)
         {
             var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 

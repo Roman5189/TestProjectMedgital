@@ -47,9 +47,12 @@ public class CameraControl : MonoBehaviour
         {
             _controlledCamera = camera;
         }
-        if (spawnController && spawnController.spawnMode && camera)
-            spawnController.SpawnObject(camera);
-    } 
+    }
+    public void SetSpawnCamera(Camera camera) 
+    {
+        if (spawnController /*&& spawnController.spawnMode && camera*/)
+            spawnController.SetCamera(camera);
+    }
     
     private void Update()
     {

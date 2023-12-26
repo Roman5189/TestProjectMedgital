@@ -57,8 +57,10 @@ namespace UI
             {
                 
             }
+            CameraControl.Instance.SetSpawnCamera(_camera);
         }
 
+        
         // This method checks whether a drag is in progress and whether target has captured the pointer. 
         // If both are true, makes target release the pointer.
         private void PointerUpHandler(PointerUpEvent evt)
