@@ -15,7 +15,7 @@ public class CameraControl : MonoBehaviour
     private InputAction _panAction;
     private InputAction _zoomAction;
     private InputAction _rotateAction;
-    
+    SpawnController spawnController;
     private void Awake()
     {
         _instance = this;
@@ -23,6 +23,8 @@ public class CameraControl : MonoBehaviour
         _panAction = mapActions.FindAction("Pan");
         _zoomAction = mapActions.FindAction("Zoom");
         _rotateAction = mapActions.FindAction("Orbit");
+
+        spawnController = FindObjectOfType<SpawnController>();
     }
     
     private void OnEnable()
@@ -45,6 +47,8 @@ public class CameraControl : MonoBehaviour
         {
             _controlledCamera = camera;
         }
+        if (spawnController && spawnController.spawnMode && camera)
+            spawnController.SpawnObject(camera);
     } 
     
     private void Update()

@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement style="height: 259px; max-height: none; flex-grow: 1; justify-content: flex-end; flex-direction: column; flex-wrap: nowrap; align-items: flex-end;">
+    <ui:VisualElement style="height: 593px; max-height: none; flex-grow: 1; justify-content: flex-end; flex-direction: column; flex-wrap: nowrap; align-items: flex-end; background-color: rgba(255, 255, 255, 0); overflow: visible; width: 132px; left: 90%; top: auto; max-width: 228px; flex-basis: auto; margin-left: 0; margin-right: 0; translate: 0 0; transform-origin: center; opacity: 1; display: flex; position: relative;">
         <ui:Label display-tooltip-when-elided="true" name="Radius" style="align-items: flex-end; width: 142px; color: rgb(255, 255, 255); justify-content: flex-end; height: 95px;" />
         <ui:VisualElement style="justify-content: flex-end; flex-grow: 0; height: 61px; flex-direction: column; align-items: flex-end;">
-            <ui:Button text="ADD SPHERE" display-tooltip-when-elided="true" name="Spawn" style="width: 141px; -unity-text-align: middle-center;" />
+            <ui:Button text="ADD SPHERE" display-tooltip-when-elided="true" name="Spawn" style="width: 141px; -unity-text-align: middle-center; display: none;" />
+            <ui:Button text="CANCEL" display-tooltip-when-elided="true" name="Cancel" style="width: 141px; -unity-text-align: middle-center;" />
             <ui:Button text="MOVE" display-tooltip-when-elided="true" name="Move" style="width: 141px;" />
             <ui:Button text="ROTATE" display-tooltip-when-elided="true" name="Rotate" style="width: 141px;" />
         </ui:VisualElement>

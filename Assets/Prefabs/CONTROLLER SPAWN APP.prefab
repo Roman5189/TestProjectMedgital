@@ -46,11 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933f379acadaf7844a51a52c3a7b3e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
   pointPrefab: {fileID: 5695128391826419677, guid: 7fa43fc059ece40488e68959e91e6a98, type: 3}
   spherePrefab: {fileID: 953821878607539008, guid: 48603b9e17144da488b5cdd98c0458f6, type: 3}
   mapActions: {fileID: -944628639613478452, guid: fa09554c394e84d4686812f8e2bd7b8b, type: 3}
   uIDocument: {fileID: 8160617733878990519}
   runtimeTransformHandle: {fileID: 7810563602722816467}
+  spawnMode: 0
 --- !u!1 &8160617733878990512
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,7 +69,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8160617733878990518
 Transform:
   m_ObjectHideFlags: 0
@@ -98,7 +100,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 0b271f915dbac0940a5d677896eb656f, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: e6101484c5963f0429cf7f96ab5f1152, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 1
 --- !u!1 &8395531979914122951
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +125,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8395531979914122951}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -150,7 +152,7 @@ MonoBehaviour:
   positionSnap: {x: 0, y: 0, z: 0}
   rotationSnap: 0
   scaleSnap: {x: 0, y: 0, z: 0}
-  autoScale: 0
+  autoScale: 1
   autoScaleFactor: 1
   handleCamera: {fileID: 0}
   target: {fileID: 0}

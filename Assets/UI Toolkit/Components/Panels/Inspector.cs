@@ -14,7 +14,14 @@ namespace UI
             });
             loadDicomBtn.text = "Загрузить DICOM";
             this.Add(loadDicomBtn);
-            
+
+            Button spawnSphereBtn = new Button(() =>
+            {
+                SpawnController.OpenSpawnManager(true);
+            });
+            spawnSphereBtn.text = "Добавить сферу";
+            this.Add(spawnSphereBtn);
+
             // Дальше добавляем необходимые элементы интерфейса
             // ..
             // ..

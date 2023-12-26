@@ -1,10 +1,13 @@
 using RuntimeHandle;
+using UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class SpawnController : MonoBehaviour
-{    
+{
+    public Camera cam;
     public GameObject pointPrefab;
     public GameObject spherePrefab;
     public InputActionAsset mapActions;
@@ -16,7 +19,8 @@ public class SpawnController : MonoBehaviour
     private VisualElement visualElement;
 
     private Label textRadius;
-    private Button spawn;
+    private Button spawnStart;
+    private Button cancel;
     private Button move;
     private Button rotate;
     private Button blue,yellow,green,red;
@@ -25,26 +29,27 @@ public class SpawnController : MonoBehaviour
     private Transform spawnObj;
     private Transform spawnPoint;   
     private Material matSpawnObj;
-    private bool spawnMode;
-
-    void Awake()
+    [HideInInspector]
+    public bool spawnMode;
+    public static bool openSpawnManager;
+    private void Start()
     {
-        ConfigurateButtons();
+        
     }
-
     private void ConfigurateButtons() 
     {   
         mouseButtonLeft = mapActions.FindAction("MouseClickLeft");
         mouseButtonRight = mapActions.FindAction("MouseClickRight");
 
-        mouseButtonLeft.performed += context => SpawnObject();
-        mouseButtonRight.performed += context => CancelSpawnMode();
+        //mouseButtonLeft.performed += context => SpawnObject();
+        mouseButtonRight.performed += context => UndoSpawn();
 
         visualElement = uIDocument.rootVisualElement;
 
         textRadius = visualElement.Q<Label>("Radius");
 
-        spawn = visualElement.Q<Button>("Spawn");
+        spawnStart = visualElement.Q<Button>("Spawn");
+        cancel = visualElement.Q<Button>("Cancel");
         move = visualElement.Q<Button>("Move");
         rotate = visualElement.Q<Button>("Rotate");
 
@@ -55,7 +60,8 @@ public class SpawnController : MonoBehaviour
 
         slider = visualElement.Q<Slider>("Transparency");
 
-        spawn.clicked += () => SpawnMode();
+        spawnStart.clicked += () => SpawnMode(true);
+        cancel.clicked += () => SpawnMode(false);
         move.clicked += () => ChangeHandle(0);
         rotate.clicked += () => ChangeHandle(1);
 
@@ -66,10 +72,16 @@ public class SpawnController : MonoBehaviour
 
         EnableButtons(false);
     }
+
+    public static void OpenSpawnManager(bool state) 
+    {
+        openSpawnManager = true;
+    }
+
     private void OnEnable()
     {
-        mouseButtonLeft.Enable();
-        mouseButtonRight.Enable();
+        //mouseButtonLeft.Enable();
+        //mouseButtonRight.Enable();
     }
 
     private void OnDisable()
@@ -77,12 +89,17 @@ public class SpawnController : MonoBehaviour
         mouseButtonLeft.Disable();
         mouseButtonRight.Disable();
     }
-    private void SpawnMode() 
+    private void SpawnMode(bool state) 
     {
-        spawnMode = true;
-        spawn.SetEnabled(false);
-    }  
-    private void CancelSpawnMode() 
+        spawnMode = state;
+        spawnObj = null;
+        openSpawnManager = state;
+        uIDocument.gameObject.SetActive(state);
+        if (!state) runtimeTransformHandle.Clear();
+        if (state) ConfigurateButtons();
+    }
+
+    private void UndoSpawn() 
     {
         if (spawnPoint)
             Destroy(spawnPoint.gameObject);
@@ -114,35 +131,41 @@ public class SpawnController : MonoBehaviour
     }
     private void RenderLine(Transform startPoint) 
     {
-        var mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector3 targetPoint = new Vector3(mousePos.x, mousePos.y, 0);
         startPoint.GetComponent<LineRenderer>().SetPosition(0, startPoint.position);
         startPoint.GetComponent<LineRenderer>().SetPosition(1, targetPoint);
         textRadius.text = Vector3.Distance(startPoint.position, targetPoint).ToString();
     }
-    private void SpawnObject()
+    public void SpawnObject(Camera camera)
     {
         //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //for old Input System
-        var mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        cam = camera;
+        if (cam && cam.name!= "Camera" && !spawnObj)
+        {
+            var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
-        if (!spawnPoint && spawnMode)
-        {
-            spawnPoint = Instantiate(pointPrefab, new Vector3(mousePos.x, mousePos.y, 0), Quaternion.Euler(0, 0, 0)).transform;
-            return;
+            if (!spawnPoint && spawnMode)
+            {
+                spawnPoint = Instantiate(pointPrefab, new Vector3(mousePos.x, mousePos.y, 0), Quaternion.Euler(0, 0, 0)).transform;
+                return;
+            }
+            if (spawnPoint)
+            {
+                spawnObj = Instantiate(spherePrefab, spawnPoint.position, Quaternion.Euler(0, 0, 0)).transform;
+                float radius = Vector3.Distance(spawnPoint.position, new Vector3(mousePos.x, mousePos.y, 0));
+                spawnObj.transform.localScale = Vector3.one * radius * 2;
+                matSpawnObj = spawnObj.GetComponent<Renderer>().material;
+                runtimeTransformHandle.handleCamera = cam;
+                runtimeTransformHandle.target = spawnObj.transform;
+                runtimeTransformHandle.enabled = true;
+                //spawnMode = false;
+                Destroy(spawnPoint.gameObject);
+                EnableButtons(true);
+                return;
+            }
         }
-        if (spawnPoint)
-        {
-            spawnObj = Instantiate(spherePrefab, spawnPoint.position, Quaternion.Euler(0, 0, 0)).transform;
-            float radius = Vector3.Distance(spawnPoint.position, new Vector3(mousePos.x, mousePos.y, 0));
-            spawnObj.transform.localScale = Vector3.one * radius * 2;
-            matSpawnObj = spawnObj.GetComponent<Renderer>().material;
-            runtimeTransformHandle.target = spawnObj.transform;
-            runtimeTransformHandle.enabled = true;
-            spawnMode = false;            
-            Destroy(spawnPoint.gameObject);
-            EnableButtons(true);
-            return;
-        }
+        
     }
 
     // Update is called once per frame
@@ -153,5 +176,8 @@ public class SpawnController : MonoBehaviour
 
         if (spawnObj && (float)System.Math.Round(matSpawnObj.color.a, 1) != (float)System.Math.Round(slider.value / 100, 1))
             ChangeTransparency(slider.value / 100);
+
+        if (openSpawnManager && !spawnMode)
+            SpawnMode(true);
     }
 }
