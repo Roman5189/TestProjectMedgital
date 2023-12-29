@@ -2,7 +2,7 @@
  * Created by Peter @sHTiF Stefcek 20.10.2020
  */
 
-Shader "sHTiF/HandleShader"
+Shader "sHTiF/OnTop"
 {
     Properties
     {
@@ -10,7 +10,7 @@ Shader "sHTiF/HandleShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent+2" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent+1" }
         LOD 100
         
         ZWrite On

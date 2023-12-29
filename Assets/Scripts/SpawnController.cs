@@ -29,6 +29,9 @@ public class SpawnController : MonoBehaviour
     private Transform spawnObj;
     private Transform spawnPoint;   
     private Material matSpawnObj;
+    private float cameraAxisX;
+    private float cameraAxisY;
+    private float cameraAxisZ;
     [HideInInspector]
     public bool spawnMode;
     public static bool openSpawnManager;
@@ -82,12 +85,8 @@ public class SpawnController : MonoBehaviour
 
     public void SetCamera(Camera camera) 
     {
-        if (cam != camera && camera.name != "Camera") 
-        {
-            cam = camera;
-            runtimeTransformHandle.handleCamera= cam;
-        }
-
+        cam = camera;
+        runtimeTransformHandle.handleCamera = cam;
     }
     private void OnEnable()
     {
@@ -142,32 +141,70 @@ public class SpawnController : MonoBehaviour
     }
     private void RenderLine(Transform startPoint) 
     {
-        if (!cam)
+        if (!cam || cam.name == "Camera")
             return;
         
         var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector3 targetPoint = new Vector3(mousePos.x, mousePos.y, 0);
+        //Vector3 targetPoint = new Vector3(mousePos.x, mousePos.y, cameraAxisZ);
+        Vector3 targetPoint = PointPos();
         startPoint.GetComponent<LineRenderer>().SetPosition(0, startPoint.position);
         startPoint.GetComponent<LineRenderer>().SetPosition(1, targetPoint);
         textRadius.text = Vector3.Distance(startPoint.position, targetPoint).ToString();
+    }
+
+    Vector3 PointPos() 
+    {
+        var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        if (cam.transform.eulerAngles.y == 180)
+        {
+            cameraAxisX = mousePos.x;
+            cameraAxisZ = mousePos.z - 1;
+
+        }
+        if (cam.transform.eulerAngles.y == 270) 
+        {
+            cameraAxisX = mousePos.x - 1;
+            cameraAxisZ = mousePos.z;
+        }
+
+        if (cam.transform.eulerAngles.y == 0) 
+        {
+            cameraAxisX = mousePos.x;
+            cameraAxisZ = mousePos.z + 1;
+        }
+
+        if (cam.transform.eulerAngles.x != 90)
+            cameraAxisY = mousePos.y;
+        if (cam.transform.eulerAngles.x == 90)
+        {
+            cameraAxisY = mousePos.y - 1f;
+            cameraAxisZ = mousePos.z;
+        }
+
+
+        if (cam.transform.eulerAngles.y == 270)
+            cameraAxisX = mousePos.x - 1;
+
+        return new Vector3(cameraAxisX, cameraAxisY, cameraAxisZ);
     }
     public void SpawnObject()
     {
         //var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //for old Input System
 
-        if (cam && !spawnObj)
+        if (cam && !spawnObj && cam.name != "Camera")
         {
-            var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            //var mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
             if (!spawnPoint && spawnMode)
             {
-                spawnPoint = Instantiate(pointPrefab, new Vector3(mousePos.x, mousePos.y, 0), Quaternion.Euler(0, 0, 0)).transform;
+                spawnPoint = Instantiate(pointPrefab, PointPos(), Quaternion.Euler(0, 0, 0)).transform;
                 return;
             }
             if (spawnPoint)
             {
                 spawnObj = Instantiate(spherePrefab, spawnPoint.position, Quaternion.Euler(0, 0, 0)).transform;
-                float radius = Vector3.Distance(spawnPoint.position, new Vector3(mousePos.x, mousePos.y, 0));
+                float radius = Vector3.Distance(spawnPoint.position, PointPos());
                 spawnObj.transform.localScale = Vector3.one * radius * 2;
                 matSpawnObj = spawnObj.GetComponent<Renderer>().material;
                 runtimeTransformHandle.handleCamera = cam;
